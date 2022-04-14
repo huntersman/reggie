@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 /**
  * @author Hunter Chen
@@ -27,9 +28,13 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    /*
+    /**
      * 员工登录
-     * */
+     *
+     * @param employee
+     * @param request
+     * @return
+     */
     @PostMapping("/login")
     public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request) {
         String password = employee.getPassword();
@@ -51,12 +56,34 @@ public class EmployeeController {
         return R.success(emp);
     }
 
-    /*
-    * 退出登录
-    * */
+    /**
+     * 退出登录
+     *
+     * @param request
+     * @return
+     */
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request) {
         request.getSession().removeAttribute("employee");
         return R.success("退出成功");
+    }
+
+    /**
+     * 新增员工
+     *
+     * @param employee
+     * @return
+     */
+    @PostMapping
+    public R<String> save(@RequestBody Employee employee, HttpServletRequest request) {
+        //设置默认密码
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        Long emp = (Long) request.getSession().getAttribute("employee");
+        employee.setCreateUser(emp);
+        employee.setUpdateUser(emp);
+        employeeService.save(employee);
+        return R.success("保存成功");
     }
 }

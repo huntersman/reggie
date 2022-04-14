@@ -52,7 +52,6 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         httpServletResponse.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
-        return;
     }
 
     /**
