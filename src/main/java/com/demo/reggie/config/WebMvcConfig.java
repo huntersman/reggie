@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2022/4/15
  */
 @Configuration
-public class WebMVCConfig implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
