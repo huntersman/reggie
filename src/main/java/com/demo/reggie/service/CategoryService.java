@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
  * @date 2022/4/16
  */
 public interface CategoryService extends IService<Category> {
+   public void remove(Long id);
 }
