@@ -26,10 +26,10 @@ public class Employee implements Serializable {
     private String idNumber;
     // 状态：0 禁用 1 正常
     private Integer status;
-    // 创建时间
+    // 创建时间，插入时填充字段
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    // 修改时间
+    // 修改时间，插入和更新时填充字段
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
     // 创建人

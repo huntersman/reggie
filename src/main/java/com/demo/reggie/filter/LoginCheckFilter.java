@@ -2,6 +2,7 @@ package com.demo.reggie.filter;
 
 
 import com.alibaba.fastjson.JSON;
+import com.demo.reggie.common.BaseContext;
 import com.demo.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -48,6 +49,8 @@ public class LoginCheckFilter implements Filter {
             return;
         }
         if (httpServletRequest.getSession().getAttribute("employee") != null) {
+            Long empId = (Long) httpServletRequest.getSession().getAttribute("employee");
+            BaseContext.setEmpId(empId);
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
