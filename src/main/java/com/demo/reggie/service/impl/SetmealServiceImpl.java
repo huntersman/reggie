@@ -40,24 +40,22 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteWithDish(List<Long> ids) {
         //如果是启售状态，抛出异常，删除失败
-        for (Long id : ids) {
-            LambdaQueryWrapper<Setmeal> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.eq(Setmeal::getId, id);
-            Setmeal setmeal = this.getOne(lambdaQueryWrapper);
-            if (setmeal.getStatus() == 1) {
-                throw new CustomException("套餐启售中，删除失败");
-            } else {
-                //删除Setmeal
-                this.removeById(setmeal);
-                //删除SetmealDish
-                LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
-                queryWrapper.eq(SetmealDish::getSetmealId, id);
-                setmealDishService.remove(queryWrapper);
-            }
+        LambdaQueryWrapper<Setmeal> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Setmeal::getId, ids);
+        lambdaQueryWrapper.eq(Setmeal::getStatus, 1);
+        int count = this.count(lambdaQueryWrapper);
+        if (count > 0) {
+            throw new CustomException("套餐启售中，删除失败");
         }
+        //删除Setmeal
+        this.removeByIds(ids);
+        //删除SetmealDish
+        LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SetmealDish::getSetmealId, ids);
+        setmealDishService.remove(queryWrapper);
     }
 
 }
