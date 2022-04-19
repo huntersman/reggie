@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.reggie.common.R;
 import com.demo.reggie.dto.SetmealDto;
 import com.demo.reggie.entity.Category;
+import com.demo.reggie.entity.Employee;
 import com.demo.reggie.entity.Setmeal;
 import com.demo.reggie.service.CategoryService;
 import com.demo.reggie.service.SetmealDishService;
@@ -92,5 +93,17 @@ public class SetmealController {
         }).collect(Collectors.toList());
         setmealService.updateBatchById(list);
         return R.success("起售成功");
+    }
+
+    @GetMapping("/{id}")
+    public R<SetmealDto> getById(@PathVariable Long id) {
+        SetmealDto setmeal = setmealService.getWithMeal(id);
+        return R.success(setmeal);
+    }
+
+    @PutMapping
+    public R<String> update(@RequestBody SetmealDto setmealDto) {
+        setmealService.updateWithMeal(setmealDto);
+        return R.success("修改成功");
     }
 }
