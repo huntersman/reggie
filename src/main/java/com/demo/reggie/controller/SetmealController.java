@@ -67,4 +67,30 @@ public class SetmealController {
         setmealService.deleteWithDish(ids);
         return R.success("删除成功");
     }
+
+    @PostMapping("/status/0")
+    public R<String> toStop(@RequestParam List<Long> ids) {
+        LambdaQueryWrapper<Setmeal> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Setmeal::getId, ids);
+        List<Setmeal> list = setmealService.list(lambdaQueryWrapper);
+        list = list.stream().map((item) -> {
+            item.setStatus(0);
+            return item;
+        }).collect(Collectors.toList());
+        setmealService.updateBatchById(list);
+        return R.success("停售成功");
+    }
+
+    @PostMapping("/status/1")
+    public R<String> toStart(@RequestParam List<Long> ids) {
+        LambdaQueryWrapper<Setmeal> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(Setmeal::getId, ids);
+        List<Setmeal> list = setmealService.list(lambdaQueryWrapper);
+        list = list.stream().map((item) -> {
+            item.setStatus(1);
+            return item;
+        }).collect(Collectors.toList());
+        setmealService.updateBatchById(list);
+        return R.success("起售成功");
+    }
 }
