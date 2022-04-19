@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.stream.Collectors;
 
 /**
@@ -77,5 +78,13 @@ public class DishController {
     public R<String> update(@RequestBody DishDto dishDto) {
         dishService.updateWithFlavor(dishDto);
         return R.success("修改成功");
+    }
+
+    @GetMapping("/list")
+    public R<List<Dish>> list(Dish dish) {
+        LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
+        List<Dish> list = dishService.list(lambdaQueryWrapper);
+        return R.success(list);
     }
 }
