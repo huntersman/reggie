@@ -9,5 +9,9 @@ import com.demo.reggie.entity.Dish;
  * @date 2022/4/16
  */
 public interface DishService extends IService<Dish> {
-    void saveWithFlavor(DishDto dishDto);
+    public void saveWithFlavor(DishDto dishDto);
+
+    public DishDto getWithFlavor(Long id);
+
+    public void updateWithFlavor(DishDto dishDto);
 }
