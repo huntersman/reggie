@@ -52,13 +52,13 @@ public class LoginCheckFilter implements Filter {
         }
         if (httpServletRequest.getSession().getAttribute("employee") != null) {
             Long empId = (Long) httpServletRequest.getSession().getAttribute("employee");
-            BaseContext.setEmpId(empId);
+            BaseContext.setCurrentId(empId);
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
         if (httpServletRequest.getSession().getAttribute("user") != null) {
             Long userId = (Long) httpServletRequest.getSession().getAttribute("user");
-            BaseContext.setEmpId(userId);
+            BaseContext.setCurrentId(userId);
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
