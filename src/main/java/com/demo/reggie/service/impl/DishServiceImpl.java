@@ -53,7 +53,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void updateWithFlavor(DishDto dishDto) {
         this.updateById(dishDto);
 

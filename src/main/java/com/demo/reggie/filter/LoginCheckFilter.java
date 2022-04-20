@@ -42,7 +42,9 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/user/sendMsg",
+                "/user/login"
         };
         if (check(urls, requestURI)) {
             chain.doFilter(httpServletRequest, httpServletResponse);
@@ -51,6 +53,12 @@ public class LoginCheckFilter implements Filter {
         if (httpServletRequest.getSession().getAttribute("employee") != null) {
             Long empId = (Long) httpServletRequest.getSession().getAttribute("employee");
             BaseContext.setEmpId(empId);
+            chain.doFilter(httpServletRequest, httpServletResponse);
+            return;
+        }
+        if (httpServletRequest.getSession().getAttribute("user") != null) {
+            Long userId = (Long) httpServletRequest.getSession().getAttribute("user");
+            BaseContext.setEmpId(userId);
             chain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
