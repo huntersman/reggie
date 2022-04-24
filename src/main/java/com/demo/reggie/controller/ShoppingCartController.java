@@ -7,12 +7,10 @@ import com.demo.reggie.entity.ShoppingCart;
 import com.demo.reggie.service.ShoppingCartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Hunter Chen
@@ -57,5 +55,34 @@ public class ShoppingCartController {
             cartServiceOne = shoppingCart;
         }
         return R.success(cartServiceOne);
+    }
+
+    /**
+     * 查看购物车
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<ShoppingCart>> list(){
+        // 1.构造查询匹配条件
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+        queryWrapper.orderByAsc(ShoppingCart::getCreateTime);
+        // 2.进行查询操作
+        List<ShoppingCart> list = shoppingCartService.list(queryWrapper);
+        return R.success(list);
+    }
+
+    /**
+     * 清空购物车
+     * @return
+     */
+    @DeleteMapping("/clean")
+    public R<String> clean(){
+        // 1.获取对应购物车id
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId,BaseContext.getCurrentId());
+        // 2.执行删除操作
+        shoppingCartService.remove(queryWrapper);
+        return R.success("清空购物车成功");
     }
 }
