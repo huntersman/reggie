@@ -42,6 +42,9 @@ spring:
   cache:
     redis:
       time-to-live: 180000
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   main:
     allow-bean-definition-overriding: true
 mybatis-plus:
